@@ -184,10 +184,22 @@
 <script>
 /* ===================== CONFIG ===================== */
 const CONFIG = {
-  // TODO (Sarah): cole aqui a URL do Inbound Webhook / Form do GHL da Oceano Terapia.
-  // Enquanto estiver vazio, o quiz funciona em modo demonstração (não envia, só mostra o resultado).
+  // TODO (Sarah): cole aqui a URL do Inbound Webhook do GHL da Oceano Terapia.
+  //   GHL > Automation > Workflows > novo Workflow > Trigger "Inbound Webhook" > copiar a URL gerada.
+  //   Enquanto estiver vazio, o quiz funciona em modo demonstração (não envia, só mostra o resultado).
   GHL_WEBHOOK_URL: "",
-  EBOOK_NOME: "Oceano Terapia"
+  EBOOK_NOME: "Oceano Terapia",
+
+  // CRM do Instituto Gaia Soul (conta Oceano Terapia) — IDs reais confirmados via API em 08/06/2026.
+  // Vão no payload pra o workflow do GHL criar a oportunidade já na pipeline/estágio certos.
+  GHL_LOCATION_ID: "WKIFW3zOVneKd04IZCgy",
+  GHL_PIPELINE_ID: "dcEVi6qGSAK9QfswmnAW",        // pipeline "Oceano Terapia Leads"
+  GHL_STAGE_ID: "665c3edf-53af-45aa-8ffd-197fb2ef1baa", // estágio "Novo Lead"
+  GHL_PIPELINE_NOME: "Oceano Terapia Leads",
+  GHL_STAGE_NOME: "Novo Lead",
+
+  // Tags de origem aplicadas a TODO lead do quiz (kebab-case, padrão da conta).
+  TAGS_ORIGEM: ["origem-instagram", "quiz-oceanoterapia", "oceanoterapia"]
 };
 
 /* ===================== PERGUNTAS ===================== */
@@ -232,13 +244,13 @@ const MAX = 21;
 
 /* ===================== PERFIS ===================== */
 const PERFIS = [
-  { min:16, emoji:"🌊", tag:"quiz_mare_alta", titulo:"Maré Alta · Saturação Crítica",
+  { min:16, emoji:"🌊", tag:"quiz-mare-alta", titulo:"Maré Alta · Saturação Crítica",
     texto:"Sua mente está em sobrecarga, e o seu corpo já está avisando. Você vive no modo sobrevivência: resolve tudo pra todos, mas não sobra nada pra você. O cansaço não é preguiça, é acúmulo. A boa notícia? O caminho de volta pro seu eixo é mais simples (e mais perto) do que parece. O contato com o oceano tem efeito comprovado de baixar o cortisol e reorganizar a mente. E é exatamente isso que o Oceano Terapia te ensina a acessar, mesmo sem morar na praia." },
-  { min:10, emoji:"🌊", tag:"quiz_mar_agitado", titulo:"Mar Agitado · Estresse em Alta",
+  { min:10, emoji:"🌊", tag:"quiz-mar-agitado", titulo:"Mar Agitado · Estresse em Alta",
     texto:"Você está funcionando, mas no limite. A mente cheia, o sono irregular e a sensação de que falta um respiro são sinais de que você gasta mais do que repõe. Ainda dá tempo de virar a maré, e pequenas práticas de reconexão com a água e a natureza podem devolver o que a rotina vem tirando. O Oceano Terapia é o seu mapa pra isso." },
-  { min:5, emoji:"🌊", tag:"quiz_marolas", titulo:"Marolas · Sinais de Alerta",
+  { min:5, emoji:"🌊", tag:"quiz-marolas", titulo:"Marolas · Sinais de Alerta",
     texto:"No geral você se segura bem, mas já sente as marolas: dias de mente cheia, noites que não rendem, aquela vontade de sumir pro mar. Esse é o melhor momento pra cuidar, antes de virar onda. O Oceano Terapia te mostra como usar a natureza como manutenção do seu bem-estar." },
-  { min:0, emoji:"🌊", tag:"quiz_aguas_calmas", titulo:"Águas Calmas · Equilíbrio",
+  { min:0, emoji:"🌊", tag:"quiz-aguas-calmas", titulo:"Águas Calmas · Equilíbrio",
     texto:"Você cuida de você, e isso aparece. Mas equilíbrio não é destino, é prática. O Oceano Terapia vai te dar camadas novas de profundidade pra essa conexão que você já cultiva, e te ajudar a sustentar isso mesmo nos dias difíceis." }
 ];
 
@@ -291,13 +303,42 @@ async function enviar(){
   mostra('carregando');
 
   const {total, perfil} = calcPerfil();
+
+  // Resumo legível das respostas (vai pro campo "Mensagem" do contato no GHL).
+  const respostasResumo = respostas
+    .map((r,i)=> `${i+1}. ${PERGUNTAS[i].t}\n   → ${r.texto} (${r.pontos} pts)`)
+    .join("\n");
+
   const payload = {
+    // Contato
     nome, email, telefone:tel,
+    firstName:(nome.split(' ')[0]||nome), fullName:nome,
+
+    // Diagnóstico
     perfil:perfil.titulo, pontuacao:total, max:MAX,
-    tags:[perfil.tag,"quiz_oceano_terapia"],
-    origem:"quiz-oceano-terapia"
+    nivel_percentual: Math.round(total/MAX*100),
+    diagnostico_texto: perfil.texto,
+    respostas_resumo: respostasResumo,
+
+    // Origem / atribuição
+    source: "instagram-quiz-oceanoterapia",
+    origem: "quiz-oceano-terapia",
+    campanha: "oceanoterapia",
+    canal: "instagram",
+
+    // Roteamento do CRM (a oportunidade entra já na pipeline/estágio certos)
+    pipeline_id: CONFIG.GHL_PIPELINE_ID,
+    pipeline_nome: CONFIG.GHL_PIPELINE_NOME,
+    stage_id: CONFIG.GHL_STAGE_ID,
+    stage_nome: CONFIG.GHL_STAGE_NOME,
+
+    // Tags: origem (instagram + quiz + campanha) + tag do perfil
+    tags: [...CONFIG.TAGS_ORIGEM, perfil.tag]
   };
-  respostas.forEach((r,i)=> payload["q"+(i+1)] = r.texto);
+  respostas.forEach((r,i)=>{
+    payload["q"+(i+1)] = r.texto;            // resposta escolhida
+    payload["q"+(i+1)+"_pergunta"] = PERGUNTAS[i].t; // enunciado da pergunta
+  });
 
   // Envio ao GHL (se configurado)
   try{
