@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Quiz Oceano Terapia — Qual é o seu nível de saturação mental?</title>
+<title>Quiz Oceano Terapia · Qual é o seu nível de saturação mental?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -132,8 +132,8 @@
     <!-- INTRO -->
     <section class="tela on" id="intro">
       <h1>Qual é o seu nível de saturação mental?</h1>
-      <p class="lead">Responda 7 perguntas rápidas e descubra, em 2 minutos, como o oceano pode te trazer de volta ao seu eixo — com um diagnóstico feito pra você.</p>
-      <p class="mini">Sem julgamento. Só um espelho honesto — e um caminho.</p>
+      <p class="lead">Responda 7 perguntas rápidas e descubra, em 2 minutos, como o oceano pode te trazer de volta ao seu eixo, com um diagnóstico feito pra você.</p>
+      <p class="mini">Sem julgamento. Só um espelho honesto, e um caminho.</p>
       <button class="btn" onclick="iniciar()">Começar meu diagnóstico →</button>
     </section>
 
@@ -195,9 +195,9 @@ const PERGUNTAS = [
   { t:"Como está a sua mente nos últimos dias?", o:[
     ["Um turbilhão que não desliga",3],
     ["Cheia, mas eu vou levando",2],
-    ["Oscila — tem dias e dias",1],
+    ["Oscila, tem dias e dias",1],
     ["Relativamente tranquila",0] ]},
-  { t:"Quando foi a última vez que você parou de verdade — sem celular, sem cobrança, só você?", o:[
+  { t:"Quando foi a última vez que você parou de verdade, sem celular, sem cobrança, só você?", o:[
     ["Nem lembro",3],
     ["Faz semanas",2],
     ["Essa semana, rapidinho",1],
@@ -232,14 +232,14 @@ const MAX = 21;
 
 /* ===================== PERFIS ===================== */
 const PERFIS = [
-  { min:16, emoji:"🌊", tag:"quiz_mare_alta", titulo:"Maré Alta — Saturação Crítica",
-    texto:"Sua mente está em sobrecarga — e o seu corpo já está avisando. Você vive no modo sobrevivência: resolve tudo pra todos, mas não sobra nada pra você. O cansaço não é preguiça, é acúmulo. A boa notícia? O caminho de volta pro seu eixo é mais simples (e mais perto) do que parece. O contato com o oceano tem efeito comprovado de baixar o cortisol e reorganizar a mente — e é exatamente isso que o Oceano Terapia te ensina a acessar, mesmo sem morar na praia." },
-  { min:10, emoji:"🌊", tag:"quiz_mar_agitado", titulo:"Mar Agitado — Estresse em Alta",
-    texto:"Você está funcionando, mas no limite. A mente cheia, o sono irregular e a sensação de que falta um respiro são sinais de que você gasta mais do que repõe. Ainda dá tempo de virar a maré — e pequenas práticas de reconexão com a água e a natureza podem devolver o que a rotina vem tirando. O Oceano Terapia é o seu mapa pra isso." },
-  { min:5, emoji:"🌊", tag:"quiz_marolas", titulo:"Marolas — Sinais de Alerta",
-    texto:"No geral você se segura bem, mas já sente as marolas: dias de mente cheia, noites que não rendem, aquela vontade de sumir pro mar. Esse é o melhor momento pra cuidar — antes de virar onda. O Oceano Terapia te mostra como usar a natureza como manutenção do seu bem-estar." },
-  { min:0, emoji:"🌊", tag:"quiz_aguas_calmas", titulo:"Águas Calmas — Equilíbrio",
-    texto:"Você cuida de você, e isso aparece. Mas equilíbrio não é destino, é prática. O Oceano Terapia vai te dar camadas novas de profundidade pra essa conexão que você já cultiva — e te ajudar a sustentar isso mesmo nos dias difíceis." }
+  { min:16, emoji:"🌊", tag:"quiz_mare_alta", titulo:"Maré Alta · Saturação Crítica",
+    texto:"Sua mente está em sobrecarga, e o seu corpo já está avisando. Você vive no modo sobrevivência: resolve tudo pra todos, mas não sobra nada pra você. O cansaço não é preguiça, é acúmulo. A boa notícia? O caminho de volta pro seu eixo é mais simples (e mais perto) do que parece. O contato com o oceano tem efeito comprovado de baixar o cortisol e reorganizar a mente. E é exatamente isso que o Oceano Terapia te ensina a acessar, mesmo sem morar na praia." },
+  { min:10, emoji:"🌊", tag:"quiz_mar_agitado", titulo:"Mar Agitado · Estresse em Alta",
+    texto:"Você está funcionando, mas no limite. A mente cheia, o sono irregular e a sensação de que falta um respiro são sinais de que você gasta mais do que repõe. Ainda dá tempo de virar a maré, e pequenas práticas de reconexão com a água e a natureza podem devolver o que a rotina vem tirando. O Oceano Terapia é o seu mapa pra isso." },
+  { min:5, emoji:"🌊", tag:"quiz_marolas", titulo:"Marolas · Sinais de Alerta",
+    texto:"No geral você se segura bem, mas já sente as marolas: dias de mente cheia, noites que não rendem, aquela vontade de sumir pro mar. Esse é o melhor momento pra cuidar, antes de virar onda. O Oceano Terapia te mostra como usar a natureza como manutenção do seu bem-estar." },
+  { min:0, emoji:"🌊", tag:"quiz_aguas_calmas", titulo:"Águas Calmas · Equilíbrio",
+    texto:"Você cuida de você, e isso aparece. Mas equilíbrio não é destino, é prática. O Oceano Terapia vai te dar camadas novas de profundidade pra essa conexão que você já cultiva, e te ajudar a sustentar isso mesmo nos dias difíceis." }
 ];
 
 /* ===================== ESTADO ===================== */

@@ -1,4 +1,4 @@
-# Oceano Terapia — Quiz Diagnóstico
+# Oceano Terapia, Quiz Diagnóstico
 
 Isca interativa (lead magnet) do e-book **Oceano Terapia**.
 A pessoa responde 7 perguntas → recebe um diagnóstico personalizado de saturação mental → entrega os dados → recebe o e-book por e-mail.
