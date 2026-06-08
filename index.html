@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Quiz Oceano Terapia — Qual é o seu nível de saturação mental?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --abismo:#06283D;
+    --mar-fundo:#0A2540;
+    --mar:#1B6CA8;
+    --azul:#2A9DF4;
+    --aqua:#A1D6E2;
+    --espuma:#EAF6FA;
+    --areia:#F5F3EF;
+    --texto:#0A2540;
+    --branco:#ffffff;
+    --sombra:0 20px 60px rgba(6,40,61,.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:'Montserrat',system-ui,sans-serif;
+    color:var(--texto);
+    background:linear-gradient(165deg,#06283D 0%,#0A2540 35%,#1B6CA8 100%);
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+    overflow-x:hidden;
+  }
+  /* ondas decorativas */
+  body::before{
+    content:"";position:fixed;left:0;right:0;bottom:0;height:38vh;z-index:0;
+    background:
+      radial-gradient(120% 80% at 50% 120%, rgba(42,157,244,.45), transparent 60%);
+    pointer-events:none;
+  }
+  .palco{
+    position:relative;z-index:1;
+    width:100%;max-width:560px;
+  }
+  .card{
+    background:rgba(255,255,255,.97);
+    border-radius:28px;
+    box-shadow:var(--sombra);
+    padding:30px 28px 32px;
+    backdrop-filter:blur(6px);
+  }
+  .logo{display:block;width:158px;max-width:52%;height:auto;margin:0 auto 20px}
+  /* progress */
+  .progresso{display:none;margin-bottom:22px}
+  .progresso.on{display:block}
+  .barra{height:7px;background:var(--espuma);border-radius:99px;overflow:hidden}
+  .barra > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mar),var(--azul));border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+  .passo{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mar);font-weight:600;margin-top:10px}
+
+  .tela{display:none;animation:sobe .5s ease both}
+  .tela.on{display:block}
+  @keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .selo{font-size:34px;line-height:1;margin-bottom:14px}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:30px;line-height:1.15;color:var(--mar-fundo);margin-bottom:14px}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:23px;line-height:1.25;color:var(--mar-fundo);margin-bottom:22px}
+  .lead{font-size:16px;line-height:1.55;color:#3a5266;margin-bottom:8px}
+  .mini{font-size:14px;color:#6b8295;font-style:italic;margin-bottom:26px}
+
+  .btn{
+    display:block;width:100%;border:none;cursor:pointer;
+    font-family:'Montserrat',sans-serif;font-weight:600;font-size:16px;
+    color:#fff;background:linear-gradient(135deg,var(--mar),var(--azul));
+    padding:17px;border-radius:16px;box-shadow:0 10px 24px rgba(27,108,168,.35);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn:hover{box-shadow:0 14px 30px rgba(42,157,244,.45)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+
+  .opcoes{display:flex;flex-direction:column;gap:12px}
+  .op{
+    text-align:left;border:2px solid var(--espuma);background:#fff;
+    border-radius:16px;padding:16px 18px;cursor:pointer;font-size:15.5px;font-weight:500;color:var(--texto);
+    transition:.18s;display:flex;align-items:center;gap:12px;
+  }
+  .op:hover{border-color:var(--aqua);background:#FAFDFE}
+  .op.sel{border-color:var(--azul);background:var(--espuma)}
+  .op .bolha{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid var(--aqua);transition:.18s}
+  .op.sel .bolha{border-color:var(--azul);background:var(--azul);box-shadow:inset 0 0 0 4px #fff}
+
+  .campo{margin-bottom:14px;text-align:left}
+  .campo label{display:block;font-size:13px;font-weight:600;color:var(--mar-fundo);margin-bottom:6px}
+  .campo input{
+    width:100%;border:2px solid var(--espuma);border-radius:14px;padding:14px 16px;
+    font-family:inherit;font-size:15px;color:var(--texto);transition:.18s;
+  }
+  .campo input:focus{outline:none;border-color:var(--azul)}
+  .priv{font-size:12px;color:#8298a8;margin:6px 2px 18px;display:flex;gap:7px;align-items:flex-start}
+
+  /* loading diagnóstico */
+  .ondinha{width:64px;height:64px;margin:6px auto 22px;border-radius:50%;
+    border:5px solid var(--espuma);border-top-color:var(--azul);animation:gira 1s linear infinite}
+  @keyframes gira{to{transform:rotate(360deg)}}
+
+  /* resultado */
+  .resel{font-size:46px;line-height:1;margin-bottom:12px}
+  .tag{display:inline-block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mar);font-weight:700;background:var(--espuma);padding:6px 14px;border-radius:99px;margin-bottom:14px}
+  .res-txt{font-size:15.5px;line-height:1.6;color:#3a5266;margin-bottom:18px}
+  .entrega{display:flex;gap:12px;align-items:center;background:var(--espuma);border-radius:16px;padding:16px;font-size:14px;color:var(--mar-fundo);font-weight:500}
+  .entrega b{display:block}
+  .medidor{margin:20px 0 6px}
+  .medidor .barra{height:10px}
+  .medidor .leg{display:flex;justify-content:space-between;font-size:11px;color:#8298a8;margin-top:7px;text-transform:uppercase;letter-spacing:.05em}
+
+  .rodape{text-align:center;color:rgba(234,246,250,.7);font-size:12px;margin-top:18px}
+  .erro{color:#c0392b;font-size:13px;margin-top:10px;display:none}
+</style>
+</head>
+<body>
+<div class="palco">
+
+  <div class="progresso" id="progresso">
+    <div class="barra"><i id="fill"></i></div>
+    <div class="passo" id="passo">Pergunta 1 de 7</div>
+  </div>
+
+  <div class="card">
+
+    <img class="logo" src="logo-oceanoterapia.jpg" alt="Oceano Terapia">
+
+    <!-- INTRO -->
+    <section class="tela on" id="intro">
+      <h1>Qual é o seu nível de saturação mental?</h1>
+      <p class="lead">Responda 7 perguntas rápidas e descubra, em 2 minutos, como o oceano pode te trazer de volta ao seu eixo — com um diagnóstico feito pra você.</p>
+      <p class="mini">Sem julgamento. Só um espelho honesto — e um caminho.</p>
+      <button class="btn" onclick="iniciar()">Começar meu diagnóstico →</button>
+    </section>
+
+    <!-- PERGUNTAS (geradas via JS) -->
+    <section class="tela" id="pergunta">
+      <h2 id="q-titulo"></h2>
+      <div class="opcoes" id="q-opcoes"></div>
+      <button class="btn" id="q-prox" style="margin-top:22px" disabled onclick="proxima()">Continuar →</button>
+    </section>
+
+    <!-- FORM -->
+    <section class="tela" id="form">
+      <div class="selo">📩</div>
+      <h2>Seu diagnóstico está pronto.</h2>
+      <p class="lead" style="margin-bottom:20px">Pra onde eu envio o seu resultado completo + o e-book <b>Oceano Terapia</b>?</p>
+      <div class="campo"><label>Seu nome</label><input id="f-nome" type="text" placeholder="Como você se chama?" autocomplete="name"></div>
+      <div class="campo"><label>Seu melhor e-mail</label><input id="f-email" type="email" placeholder="voce@email.com" autocomplete="email"></div>
+      <div class="campo"><label>WhatsApp</label><input id="f-tel" type="tel" placeholder="(00) 00000-0000" autocomplete="tel"></div>
+      <p class="priv">🔒 <span>Seus dados estão seguros. Você recebe o e-book e nada de spam.</span></p>
+      <button class="btn" id="f-enviar" onclick="enviar()">Ver meu diagnóstico + receber o e-book →</button>
+      <p class="erro" id="f-erro">Preencha nome, e-mail e WhatsApp pra continuar.</p>
+    </section>
+
+    <!-- LOADING -->
+    <section class="tela" id="carregando">
+      <div class="ondinha"></div>
+      <h2 style="text-align:center">Analisando suas respostas…</h2>
+      <p class="lead" style="text-align:center">Cruzando o que você sente com o que o oceano pode fazer por você.</p>
+    </section>
+
+    <!-- RESULTADO -->
+    <section class="tela" id="resultado">
+      <div class="resel" id="r-emoji">🌊</div>
+      <span class="tag" id="r-tag"></span>
+      <h2 id="r-titulo"></h2>
+      <p class="res-txt" id="r-texto"></p>
+      <div class="medidor">
+        <div class="barra"><i id="r-fill" style="background:linear-gradient(90deg,#2A9DF4,#1B6CA8)"></i></div>
+        <div class="leg"><span>Águas calmas</span><span>Maré alta</span></div>
+      </div>
+      <div class="entrega">📨 <span><b id="r-nome">Pronto!</b> Seu e-book personalizado já está a caminho do seu e-mail.</span></div>
+    </section>
+
+  </div>
+  <p class="rodape">Oceano Terapia · um respiro pra sua mente</p>
+</div>
+
+<script>
+/* ===================== CONFIG ===================== */
+const CONFIG = {
+  // TODO (Sarah): cole aqui a URL do Inbound Webhook / Form do GHL da Oceano Terapia.
+  // Enquanto estiver vazio, o quiz funciona em modo demonstração (não envia, só mostra o resultado).
+  GHL_WEBHOOK_URL: "",
+  EBOOK_NOME: "Oceano Terapia"
+};
+
+/* ===================== PERGUNTAS ===================== */
+const PERGUNTAS = [
+  { t:"Como está a sua mente nos últimos dias?", o:[
+    ["Um turbilhão que não desliga",3],
+    ["Cheia, mas eu vou levando",2],
+    ["Oscila — tem dias e dias",1],
+    ["Relativamente tranquila",0] ]},
+  { t:"Quando foi a última vez que você parou de verdade — sem celular, sem cobrança, só você?", o:[
+    ["Nem lembro",3],
+    ["Faz semanas",2],
+    ["Essa semana, rapidinho",1],
+    ["Faço isso com frequência",0] ]},
+  { t:"E o seu sono?", o:[
+    ["Durmo mal e acordo cansado(a)",3],
+    ["Tem noite que vai, tem noite que não",2],
+    ["Razoável",1],
+    ["Durmo bem",0] ]},
+  { t:"Qual é a sua relação com o mar / a natureza hoje?", o:[
+    ["Vivo longe, faz tempo que não sinto isso",3],
+    ["Queria muito mais do que consigo",2],
+    ["De vez em quando consigo",1],
+    ["Faz parte da minha rotina",0] ]},
+  { t:"Quando bate a ansiedade, o que você costuma fazer?", o:[
+    ["Rolo o feed pra anestesiar",3],
+    ["Como ou trabalho mais pra não pensar",2],
+    ["Tento respirar, mas nem sempre dá",1],
+    ["Busco a natureza / movimento / silêncio",0] ]},
+  { t:"Você sente que tem TEMPO pra cuidar de você?", o:[
+    ["Nenhum",3],
+    ["Quase nada",2],
+    ["Um pouco",1],
+    ["Sim, eu priorizo isso",0] ]},
+  { t:"Se você pudesse sentir UMA coisa a mais a partir de amanhã, seria...", o:[
+    ["Paz / silêncio mental",3],
+    ["Energia de novo",2],
+    ["Presença, viver o agora",1],
+    ["Conexão comigo e com a natureza",1] ]}
+];
+const MAX = 21;
+
+/* ===================== PERFIS ===================== */
+const PERFIS = [
+  { min:16, emoji:"🌊", tag:"quiz_mare_alta", titulo:"Maré Alta — Saturação Crítica",
+    texto:"Sua mente está em sobrecarga — e o seu corpo já está avisando. Você vive no modo sobrevivência: resolve tudo pra todos, mas não sobra nada pra você. O cansaço não é preguiça, é acúmulo. A boa notícia? O caminho de volta pro seu eixo é mais simples (e mais perto) do que parece. O contato com o oceano tem efeito comprovado de baixar o cortisol e reorganizar a mente — e é exatamente isso que o Oceano Terapia te ensina a acessar, mesmo sem morar na praia." },
+  { min:10, emoji:"🌊", tag:"quiz_mar_agitado", titulo:"Mar Agitado — Estresse em Alta",
+    texto:"Você está funcionando, mas no limite. A mente cheia, o sono irregular e a sensação de que falta um respiro são sinais de que você gasta mais do que repõe. Ainda dá tempo de virar a maré — e pequenas práticas de reconexão com a água e a natureza podem devolver o que a rotina vem tirando. O Oceano Terapia é o seu mapa pra isso." },
+  { min:5, emoji:"🌊", tag:"quiz_marolas", titulo:"Marolas — Sinais de Alerta",
+    texto:"No geral você se segura bem, mas já sente as marolas: dias de mente cheia, noites que não rendem, aquela vontade de sumir pro mar. Esse é o melhor momento pra cuidar — antes de virar onda. O Oceano Terapia te mostra como usar a natureza como manutenção do seu bem-estar." },
+  { min:0, emoji:"🌊", tag:"quiz_aguas_calmas", titulo:"Águas Calmas — Equilíbrio",
+    texto:"Você cuida de você, e isso aparece. Mas equilíbrio não é destino, é prática. O Oceano Terapia vai te dar camadas novas de profundidade pra essa conexão que você já cultiva — e te ajudar a sustentar isso mesmo nos dias difíceis." }
+];
+
+/* ===================== ESTADO ===================== */
+let idx = 0;
+let respostas = [];   // {pontos, texto}
+let escolhaAtual = null;
+
+const $ = id => document.getElementById(id);
+function mostra(tela){ document.querySelectorAll('.tela').forEach(s=>s.classList.remove('on')); $(tela).classList.add('on'); }
+
+function iniciar(){ idx=0; respostas=[]; $('progresso').classList.add('on'); renderPergunta(); mostra('pergunta'); }
+
+function renderPergunta(){
+  const p = PERGUNTAS[idx];
+  $('q-titulo').textContent = p.t;
+  $('passo').textContent = `Pergunta ${idx+1} de ${PERGUNTAS.length}`;
+  $('fill').style.width = `${(idx/PERGUNTAS.length)*100}%`;
+  escolhaAtual = null;
+  $('q-prox').disabled = true;
+  const box = $('q-opcoes'); box.innerHTML='';
+  p.o.forEach((op,i)=>{
+    const b = document.createElement('button');
+    b.className='op'; b.innerHTML=`<span class="bolha"></span><span>${op[0]}</span>`;
+    b.onclick=()=>{ document.querySelectorAll('.op').forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); escolhaAtual={pontos:op[1],texto:op[0]}; $('q-prox').disabled=false; };
+    box.appendChild(b);
+  });
+}
+
+function proxima(){
+  if(!escolhaAtual) return;
+  respostas[idx]=escolhaAtual;
+  idx++;
+  if(idx < PERGUNTAS.length){ renderPergunta(); mostra('pergunta'); }
+  else { $('fill').style.width='100%'; $('progresso').classList.remove('on'); mostra('form'); }
+}
+
+function calcPerfil(){
+  const total = respostas.reduce((s,r)=>s+r.pontos,0);
+  const perfil = PERFIS.find(p=>total>=p.min);
+  return {total, perfil};
+}
+
+async function enviar(){
+  const nome=$('f-nome').value.trim(), email=$('f-email').value.trim(), tel=$('f-tel').value.trim();
+  const okEmail=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  if(!nome || !okEmail || tel.length<8){ $('f-erro').style.display='block'; return; }
+  $('f-erro').style.display='none';
+  $('f-enviar').disabled=true;
+  mostra('carregando');
+
+  const {total, perfil} = calcPerfil();
+  const payload = {
+    nome, email, telefone:tel,
+    perfil:perfil.titulo, pontuacao:total, max:MAX,
+    tags:[perfil.tag,"quiz_oceano_terapia"],
+    origem:"quiz-oceano-terapia"
+  };
+  respostas.forEach((r,i)=> payload["q"+(i+1)] = r.texto);
+
+  // Envio ao GHL (se configurado)
+  try{
+    if(CONFIG.GHL_WEBHOOK_URL){
+      await fetch(CONFIG.GHL_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    }else{
+      console.log("[DEMO] GHL_WEBHOOK_URL vazio. Payload que seria enviado:",payload);
+    }
+  }catch(e){ console.warn("Falha no envio ao GHL:",e); }
+
+  setTimeout(()=>mostrarResultado(nome,total,perfil), 1600);
+}
+
+function mostrarResultado(nome,total,perfil){
+  $('r-emoji').textContent=perfil.emoji;
+  $('r-tag').textContent="Seu diagnóstico";
+  $('r-titulo').textContent=perfil.titulo;
+  $('r-texto').textContent=perfil.texto;
+  $('r-nome').textContent = (nome? nome.split(' ')[0]+", pronto!" : "Pronto!");
+  mostra('resultado');
+  setTimeout(()=>{ $('r-fill').style.width = Math.max(8,Math.round(total/MAX*100))+"%"; },120);
+}
+</script>
+</body>
+</html>
