@@ -198,8 +198,10 @@ const CONFIG = {
   GHL_PIPELINE_NOME: "Oceano Terapia Leads",
   GHL_STAGE_NOME: "Novo Lead",
 
-  // Tags de origem aplicadas a TODO lead do quiz (kebab-case, padrão da conta).
-  TAGS_ORIGEM: ["origem-instagram", "quiz-oceanoterapia", "oceanoterapia"]
+  // Tags fixas aplicadas a TODO lead do quiz (kebab-case, padrão da conta).
+  // "recebeu-ebook" entra aqui porque o envio do e-book é automático logo após a entrada
+  // do lead (ver doc § Integração GHL, nuance da tag de e-book).
+  TAGS_ORIGEM: ["origem-instagram", "quiz-oceanoterapia", "oceanoterapia", "recebeu-ebook"]
 };
 
 /* ===================== PERGUNTAS ===================== */
@@ -332,7 +334,7 @@ async function enviar(){
     stage_id: CONFIG.GHL_STAGE_ID,
     stage_nome: CONFIG.GHL_STAGE_NOME,
 
-    // Tags: origem (instagram + quiz + campanha) + tag do perfil
+    // Tags: 4 fixas (origem-instagram + quiz-oceanoterapia + oceanoterapia + recebeu-ebook) + tag do perfil
     tags: [...CONFIG.TAGS_ORIGEM, perfil.tag]
   };
   respostas.forEach((r,i)=>{
