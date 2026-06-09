@@ -97,6 +97,21 @@
   }
   .campo input:focus{outline:none;border-color:var(--azul)}
   .priv{font-size:12px;color:#8298a8;margin:6px 2px 18px;display:flex;gap:7px;align-items:flex-start}
+  .consentimento{margin:6px 0 16px;text-align:left}
+  .consent-check{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.45;color:#526b7d}
+  .consent-check input{width:18px;height:18px;margin-top:1px;accent-color:var(--mar);flex:0 0 auto}
+  .consent-check a{color:var(--mar);font-weight:700;text-decoration:none}
+  .termos{border:1px solid var(--espuma);border-radius:14px;background:#FAFDFE;margin-top:10px;overflow:hidden}
+  .termos summary{cursor:pointer;padding:12px 14px;font-size:12px;font-weight:700;color:var(--mar-fundo)}
+  .termos div{padding:0 14px 14px;font-size:11.5px;line-height:1.55;color:#526b7d}
+  .termos p + p{margin-top:8px}
+  .download{
+    display:block;width:100%;text-align:center;text-decoration:none;margin-top:16px;
+    font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;color:#fff;
+    background:linear-gradient(135deg,var(--mar-fundo),var(--mar));
+    padding:15px;border-radius:16px;box-shadow:0 10px 24px rgba(6,40,61,.25);
+  }
+  .download:hover{box-shadow:0 14px 30px rgba(6,40,61,.34)}
 
   /* loading diagnóstico */
   .ondinha{width:64px;height:64px;margin:6px auto 22px;border-radius:50%;
@@ -152,9 +167,24 @@
       <div class="campo"><label>Seu nome</label><input id="f-nome" type="text" placeholder="Como você se chama?" autocomplete="name"></div>
       <div class="campo"><label>Seu melhor e-mail</label><input id="f-email" type="email" placeholder="voce@email.com" autocomplete="email"></div>
       <div class="campo"><label>WhatsApp</label><input id="f-tel" type="tel" placeholder="(00) 00000-0000" autocomplete="tel"></div>
-      <p class="priv">🔒 <span>Seus dados estão seguros. Você recebe o e-book e nada de spam.</span></p>
+      <div class="consentimento">
+        <label class="consent-check">
+          <input id="f-consent" type="checkbox">
+          <span>Li e aceito os termos de uso e a política de privacidade. Autorizo o uso dos meus dados para receber o diagnóstico, o e-book e contatos relacionados à Oceano Terapia.</span>
+        </label>
+        <details class="termos">
+          <summary>Ver termos e privacidade de dados</summary>
+          <div>
+            <p><b>Quais dados coletamos:</b> nome, e-mail, WhatsApp e respostas do quiz. Esses dados são necessários para gerar o diagnóstico, entregar o e-book e organizar o atendimento.</p>
+            <p><b>Como usamos:</b> registramos seus dados em um sistema de CRM para contato, histórico de relacionamento e envio de comunicações relacionadas à Oceano Terapia. Não vendemos seus dados.</p>
+            <p><b>Base legal:</b> o tratamento acontece com o seu consentimento e para execução da solicitação feita por você neste quiz, conforme a LGPD.</p>
+            <p><b>Seus direitos:</b> você pode pedir acesso, correção, exclusão dos dados ou retirada do consentimento a qualquer momento pelos canais oficiais da Oceano Terapia.</p>
+          </div>
+        </details>
+      </div>
+      <p class="priv">🔒 <span>Seus dados serão usados apenas para este diagnóstico, entrega do e-book e organização do atendimento no CRM.</span></p>
       <button class="btn" id="f-enviar" onclick="enviar()">Ver meu diagnóstico + receber o e-book →</button>
-      <p class="erro" id="f-erro">Preencha nome, e-mail e WhatsApp pra continuar.</p>
+      <p class="erro" id="f-erro">Preencha nome, e-mail, WhatsApp e aceite os termos pra continuar.</p>
     </section>
 
     <!-- LOADING -->
@@ -175,6 +205,7 @@
         <div class="leg"><span>Águas calmas</span><span>Maré alta</span></div>
       </div>
       <div class="entrega">📨 <span><b id="r-nome">Pronto!</b> Seu e-book personalizado já está a caminho do seu e-mail.</span></div>
+      <a class="download" id="r-download" href="ebook-oceanoterapia.pdf" download>Baixar o e-book em PDF</a>
     </section>
 
   </div>
@@ -189,6 +220,7 @@ const CONFIG = {
   //   Enquanto estiver vazio, o quiz funciona em modo demonstração (não envia, só mostra o resultado).
   GHL_WEBHOOK_URL: "",
   EBOOK_NOME: "Oceano Terapia",
+  EBOOK_URL: "ebook-oceanoterapia.pdf",
 
   // CRM do Instituto Gaia Soul (conta Oceano Terapia) — IDs reais confirmados via API em 08/06/2026.
   // Vão no payload pra o workflow do GHL criar a oportunidade já na pipeline/estágio certos.
@@ -299,7 +331,8 @@ function calcPerfil(){
 async function enviar(){
   const nome=$('f-nome').value.trim(), email=$('f-email').value.trim(), tel=$('f-tel').value.trim();
   const okEmail=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-  if(!nome || !okEmail || tel.length<8){ $('f-erro').style.display='block'; return; }
+  const consentimento=$('f-consent').checked;
+  if(!nome || !okEmail || tel.length<8 || !consentimento){ $('f-erro').style.display='block'; return; }
   $('f-erro').style.display='none';
   $('f-enviar').disabled=true;
   mostra('carregando');
@@ -327,6 +360,7 @@ async function enviar(){
     origem: "quiz-oceano-terapia",
     campanha: "oceanoterapia",
     canal: "instagram",
+    ebook_url: CONFIG.EBOOK_URL,
 
     // Roteamento do CRM (a oportunidade entra já na pipeline/estágio certos)
     pipeline_id: CONFIG.GHL_PIPELINE_ID,
@@ -335,7 +369,15 @@ async function enviar(){
     stage_nome: CONFIG.GHL_STAGE_NOME,
 
     // Tags: 4 fixas (origem-instagram + quiz-oceanoterapia + oceanoterapia + recebeu-ebook) + tag do perfil
-    tags: [...CONFIG.TAGS_ORIGEM, perfil.tag]
+    tags: [...CONFIG.TAGS_ORIGEM, perfil.tag],
+
+    // Consentimento LGPD
+    aceite_termos: true,
+    aceite_privacidade: true,
+    consentimento_lgpd: true,
+    consentimento_texto: "Usuário aceitou os termos de uso e a política de privacidade do quiz Oceano Terapia.",
+    finalidade_dados: "Gerar diagnóstico, entregar e-book e registrar o lead no CRM para atendimento relacionado à Oceano Terapia.",
+    data_consentimento: new Date().toISOString()
   };
   respostas.forEach((r,i)=>{
     payload["q"+(i+1)] = r.texto;            // resposta escolhida
@@ -360,6 +402,7 @@ function mostrarResultado(nome,total,perfil){
   $('r-titulo').textContent=perfil.titulo;
   $('r-texto').textContent=perfil.texto;
   $('r-nome').textContent = (nome? nome.split(' ')[0]+", pronto!" : "Pronto!");
+  $('r-download').href = CONFIG.EBOOK_URL;
   mostra('resultado');
   setTimeout(()=>{ $('r-fill').style.width = Math.max(8,Math.round(total/MAX*100))+"%"; },120);
 }
