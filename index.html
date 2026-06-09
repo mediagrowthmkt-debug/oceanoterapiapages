@@ -215,10 +215,8 @@
 <script>
 /* ===================== CONFIG ===================== */
 const CONFIG = {
-  // TODO (Sarah): cole aqui a URL do Inbound Webhook do GHL da Oceano Terapia.
-  //   GHL > Automation > Workflows > novo Workflow > Trigger "Inbound Webhook" > copiar a URL gerada.
-  //   Enquanto estiver vazio, o quiz funciona em modo demonstração (não envia, só mostra o resultado).
-  GHL_WEBHOOK_URL: "",
+  // n8n MediaGrowth: cria/atualiza contato e oportunidade no GHL do Instituto Gaia Soul.
+  GHL_WEBHOOK_URL: "https://mediagrowth-n8n.63kuy3.easypanel.host/webhook/quiz-oceanoterapia-lead",
   EBOOK_NOME: "Oceano Terapia",
   EBOOK_URL: "ebook-oceanoterapia.pdf",
 
@@ -387,7 +385,8 @@ async function enviar(){
   // Envio ao GHL (se configurado)
   try{
     if(CONFIG.GHL_WEBHOOK_URL){
-      await fetch(CONFIG.GHL_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+      const resposta = await fetch(CONFIG.GHL_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+      if(!resposta.ok) throw new Error(`Webhook HTTP ${resposta.status}`);
     }else{
       console.log("[DEMO] GHL_WEBHOOK_URL vazio. Payload que seria enviado:",payload);
     }

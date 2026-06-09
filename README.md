@@ -7,9 +7,12 @@ A pessoa responde 7 perguntas → recebe um diagnóstico personalizado de satura
 Página estática (GitHub Pages). Arquivo principal: `index.html`.
 
 ## Integração GHL
-Editar `CONFIG.GHL_WEBHOOK_URL` no `index.html` com a URL do Inbound Webhook/Form do GHL da Oceano Terapia.
-Enquanto vazio, roda em modo demonstração (não envia, só mostra o resultado).
+O quiz envia os leads para o webhook n8n:
+`https://mediagrowth-n8n.63kuy3.easypanel.host/webhook/quiz-oceanoterapia-lead`
 
-Campos enviados (JSON POST): `nome`, `email`, `telefone`, `perfil`, `pontuacao`, `tags[]`, `q1`..`q7`.
+Workflow n8n: `[GAIA SOUL] Oceano Terapia - Quiz → GHL`.
+Fluxo: cria/atualiza contato no GHL do Instituto Gaia Soul, aplica tags do quiz e cria oportunidade na pipeline `Oceano Terapia Leads`, estágio `Novo Lead`.
+
+Campos enviados (JSON POST): `nome`, `email`, `telefone`, `perfil`, `pontuacao`, `diagnostico_texto`, `respostas_resumo`, `tags[]`, consentimento LGPD, `q1`..`q7`.
 
 Feito pela MediaGrowth.
