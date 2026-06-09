@@ -105,13 +105,16 @@
   .termos summary{cursor:pointer;padding:12px 14px;font-size:12px;font-weight:700;color:var(--mar-fundo)}
   .termos div{padding:0 14px 14px;font-size:11.5px;line-height:1.55;color:#526b7d}
   .termos p + p{margin-top:8px}
+  .acoes-ebook{display:flex;flex-direction:column;gap:10px;margin-top:16px}
   .download{
-    display:block;width:100%;text-align:center;text-decoration:none;margin-top:16px;
+    display:block;width:100%;text-align:center;text-decoration:none;
     font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;color:#fff;
     background:linear-gradient(135deg,var(--mar-fundo),var(--mar));
     padding:15px;border-radius:16px;box-shadow:0 10px 24px rgba(6,40,61,.25);
   }
+  .download.sec{color:var(--mar-fundo);background:#fff;border:2px solid var(--espuma);box-shadow:none}
   .download:hover{box-shadow:0 14px 30px rgba(6,40,61,.34)}
+  .download.sec:hover{border-color:var(--aqua);box-shadow:0 10px 22px rgba(6,40,61,.12)}
 
   /* loading diagnóstico */
   .ondinha{width:64px;height:64px;margin:6px auto 22px;border-radius:50%;
@@ -203,8 +206,12 @@
         <div class="barra"><i id="r-fill" style="background:linear-gradient(90deg,#2A9DF4,#1B6CA8)"></i></div>
         <div class="leg"><span>Águas calmas</span><span>Maré alta</span></div>
       </div>
-      <div class="entrega">📨 <span><b id="r-nome">Pronto!</b> Seu diagnóstico foi registrado. Você já pode baixar o e-book.</span></div>
-      <a class="download" id="r-download" href="https://raw.githubusercontent.com/mediagrowthmkt-debug/oceanoterapiapages/main/ebook-oceanoterapia.pdf" download>Baixar o e-book em PDF</a>
+      <div class="entrega">📨 <span><b id="r-nome">Pronto!</b> Seu diagnóstico foi registrado. Escolha como prefere acessar o e-book.</span></div>
+      <div class="acoes-ebook">
+        <a class="download" id="r-download" href="https://raw.githubusercontent.com/mediagrowthmkt-debug/oceanoterapiapages/main/ebook-oceanoterapia.pdf" download>1. Baixar direto em PDF</a>
+        <a class="download sec" id="r-drive" href="https://drive.google.com/drive/folders/1HbBIIrw2R5BuZC8MAB6Cqh5ST8TcJgXb?usp=sharing" target="_blank" rel="noopener">2. Ver no Google Drive</a>
+        <a class="download sec" id="r-online" href="https://www.calameo.com/read/0082434534eaa018b0034" target="_blank" rel="noopener">3. Ver online</a>
+      </div>
     </section>
 
   </div>
@@ -218,6 +225,8 @@ const CONFIG = {
   GHL_WEBHOOK_URL: "https://mediagrowth-n8n.63kuy3.easypanel.host/webhook/quiz-oceanoterapia-lead",
   EBOOK_NOME: "Oceano Terapia",
   EBOOK_URL: "https://raw.githubusercontent.com/mediagrowthmkt-debug/oceanoterapiapages/main/ebook-oceanoterapia.pdf",
+  EBOOK_DRIVE_URL: "https://drive.google.com/drive/folders/1HbBIIrw2R5BuZC8MAB6Cqh5ST8TcJgXb?usp=sharing",
+  EBOOK_ONLINE_URL: "https://www.calameo.com/read/0082434534eaa018b0034",
 
   // CRM do Instituto Gaia Soul (conta Oceano Terapia) — IDs reais confirmados via API em 08/06/2026.
   // Vão no payload pra o workflow do GHL criar a oportunidade já na pipeline/estágio certos.
@@ -357,6 +366,8 @@ async function enviar(){
     campanha: "oceanoterapia",
     canal: "instagram",
     ebook_url: CONFIG.EBOOK_URL,
+    ebook_drive_url: CONFIG.EBOOK_DRIVE_URL,
+    ebook_online_url: CONFIG.EBOOK_ONLINE_URL,
 
     // Roteamento do CRM (a oportunidade entra já na pipeline/estágio certos)
     pipeline_id: CONFIG.GHL_PIPELINE_ID,
@@ -400,6 +411,8 @@ function mostrarResultado(nome,total,perfil){
   $('r-texto').textContent=perfil.texto;
   $('r-nome').textContent = (nome? nome.split(' ')[0]+", pronto!" : "Pronto!");
   $('r-download').href = CONFIG.EBOOK_URL;
+  $('r-drive').href = CONFIG.EBOOK_DRIVE_URL;
+  $('r-online').href = CONFIG.EBOOK_ONLINE_URL;
   mostra('resultado');
   setTimeout(()=>{ $('r-fill').style.width = Math.max(8,Math.round(total/MAX*100))+"%"; },120);
 }
