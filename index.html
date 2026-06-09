@@ -106,7 +106,7 @@
   .termos div{padding:0 14px 14px;font-size:11.5px;line-height:1.55;color:#526b7d}
   .termos p + p{margin-top:8px}
   .download{
-    display:block;width:100%;text-align:center;text-decoration:none;margin-top:16px;border:none;cursor:default;
+    display:block;width:100%;text-align:center;text-decoration:none;margin-top:16px;
     font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;color:#fff;
     background:linear-gradient(135deg,var(--mar-fundo),var(--mar));
     padding:15px;border-radius:16px;box-shadow:0 10px 24px rgba(6,40,61,.25);
@@ -204,8 +204,8 @@
         <div class="barra"><i id="r-fill" style="background:linear-gradient(90deg,#2A9DF4,#1B6CA8)"></i></div>
         <div class="leg"><span>Águas calmas</span><span>Maré alta</span></div>
       </div>
-      <div class="entrega">📨 <span><b id="r-nome">Pronto!</b> Seu diagnóstico foi registrado. O e-book será enviado pelo atendimento da Oceano Terapia.</span></div>
-      <button class="download" id="r-download" type="button">E-book solicitado com sucesso</button>
+      <div class="entrega">📨 <span><b id="r-nome">Pronto!</b> Seu diagnóstico foi registrado. Você já pode baixar o e-book.</span></div>
+      <a class="download" id="r-download" href="ebook-oceanoterapia.pdf" download>Baixar o e-book em PDF</a>
     </section>
 
   </div>
@@ -218,7 +218,7 @@ const CONFIG = {
   // n8n MediaGrowth: cria/atualiza contato e oportunidade no GHL do Instituto Gaia Soul.
   GHL_WEBHOOK_URL: "https://mediagrowth-n8n.63kuy3.easypanel.host/webhook/quiz-oceanoterapia-lead",
   EBOOK_NOME: "Oceano Terapia",
-  EBOOK_URL: "envio-via-crm",
+  EBOOK_URL: "ebook-oceanoterapia.pdf",
 
   // CRM do Instituto Gaia Soul (conta Oceano Terapia) — IDs reais confirmados via API em 08/06/2026.
   // Vão no payload pra o workflow do GHL criar a oportunidade já na pipeline/estágio certos.
@@ -401,6 +401,7 @@ function mostrarResultado(nome,total,perfil){
   $('r-titulo').textContent=perfil.titulo;
   $('r-texto').textContent=perfil.texto;
   $('r-nome').textContent = (nome? nome.split(' ')[0]+", pronto!" : "Pronto!");
+  $('r-download').href = CONFIG.EBOOK_URL;
   mostra('resultado');
   setTimeout(()=>{ $('r-fill').style.width = Math.max(8,Math.round(total/MAX*100))+"%"; },120);
 }
