@@ -1,7 +1,7 @@
 # Oceano Terapia, Quiz Diagnóstico
 
 Isca interativa (lead magnet) do e-book **Oceano Terapia**.
-A pessoa responde 7 perguntas → recebe um diagnóstico personalizado de saturação mental → entrega os dados → recebe o e-book por e-mail.
+A pessoa responde 7 perguntas → recebe um diagnóstico personalizado de saturação mental → entrega nome e WhatsApp → baixa o e-book na tela de resultado.
 
 ## Publicação
 Página estática (GitHub Pages). Arquivo principal: `index.html`.
@@ -13,6 +13,6 @@ O quiz envia os leads para o webhook n8n:
 Workflow n8n: `[GAIA SOUL] Oceano Terapia - Quiz → GHL`.
 Fluxo: cria/atualiza contato no GHL do Instituto Gaia Soul, aplica tags do quiz e cria oportunidade na pipeline `Oceano Terapia Leads`, estágio `Novo Lead`.
 
-Campos enviados (JSON POST): `nome`, `email`, `telefone`, `perfil`, `pontuacao`, `diagnostico_texto`, `respostas_resumo`, `tags[]`, consentimento LGPD, `q1`..`q7`.
+Campos enviados (JSON POST): `nome`, `telefone`, `perfil`, `pontuacao`, `diagnostico_texto`, `respostas_resumo`, `tags[]`, consentimento LGPD, `q1`..`q7`.
 
 Feito pela MediaGrowth.

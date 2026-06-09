@@ -163,9 +163,8 @@
     <section class="tela" id="form">
       <div class="selo">📩</div>
       <h2>Seu diagnóstico está pronto.</h2>
-      <p class="lead" style="margin-bottom:20px">Pra onde eu envio o seu resultado completo + o e-book <b>Oceano Terapia</b>?</p>
+      <p class="lead" style="margin-bottom:20px">Preencha seus dados para liberar o diagnóstico completo + o e-book <b>Oceano Terapia</b>.</p>
       <div class="campo"><label>Seu nome</label><input id="f-nome" type="text" placeholder="Como você se chama?" autocomplete="name"></div>
-      <div class="campo"><label>Seu melhor e-mail</label><input id="f-email" type="email" placeholder="voce@email.com" autocomplete="email"></div>
       <div class="campo"><label>WhatsApp</label><input id="f-tel" type="tel" placeholder="(00) 00000-0000" autocomplete="tel"></div>
       <div class="consentimento">
         <label class="consent-check">
@@ -175,7 +174,7 @@
         <details class="termos">
           <summary>Ver termos e privacidade de dados</summary>
           <div>
-            <p><b>Quais dados coletamos:</b> nome, e-mail, WhatsApp e respostas do quiz. Esses dados são necessários para gerar o diagnóstico, entregar o e-book e organizar o atendimento.</p>
+            <p><b>Quais dados coletamos:</b> nome, WhatsApp e respostas do quiz. Esses dados são necessários para gerar o diagnóstico, liberar o e-book e organizar o atendimento.</p>
             <p><b>Como usamos:</b> registramos seus dados em um sistema de CRM para contato, histórico de relacionamento e envio de comunicações relacionadas à Oceano Terapia. Não vendemos seus dados.</p>
             <p><b>Base legal:</b> o tratamento acontece com o seu consentimento e para execução da solicitação feita por você neste quiz, conforme a LGPD.</p>
             <p><b>Seus direitos:</b> você pode pedir acesso, correção, exclusão dos dados ou retirada do consentimento a qualquer momento pelos canais oficiais da Oceano Terapia.</p>
@@ -184,7 +183,7 @@
       </div>
       <p class="priv">🔒 <span>Seus dados serão usados apenas para este diagnóstico, entrega do e-book e organização do atendimento no CRM.</span></p>
       <button class="btn" id="f-enviar" onclick="enviar()">Ver meu diagnóstico + receber o e-book →</button>
-      <p class="erro" id="f-erro">Preencha nome, e-mail, WhatsApp e aceite os termos pra continuar.</p>
+      <p class="erro" id="f-erro">Preencha nome, WhatsApp e aceite os termos pra continuar.</p>
     </section>
 
     <!-- LOADING -->
@@ -327,10 +326,9 @@ function calcPerfil(){
 }
 
 async function enviar(){
-  const nome=$('f-nome').value.trim(), email=$('f-email').value.trim(), tel=$('f-tel').value.trim();
-  const okEmail=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  const nome=$('f-nome').value.trim(), tel=$('f-tel').value.trim();
   const consentimento=$('f-consent').checked;
-  if(!nome || !okEmail || tel.length<8 || !consentimento){ $('f-erro').style.display='block'; return; }
+  if(!nome || tel.length<8 || !consentimento){ $('f-erro').style.display='block'; return; }
   $('f-erro').style.display='none';
   $('f-enviar').disabled=true;
   mostra('carregando');
@@ -344,7 +342,7 @@ async function enviar(){
 
   const payload = {
     // Contato
-    nome, email, telefone:tel,
+    nome, telefone:tel,
     firstName:(nome.split(' ')[0]||nome), fullName:nome,
 
     // Diagnóstico
