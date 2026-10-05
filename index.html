@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>
+/* QR code impresso dos eventos (Rio Ocean Week) aponta pra esta página.
+   De 06/10 a 19/10/2026 (FLICO + respostas atrasadas) quem chega pelo QR vai pra pesquisa do Submarino Imersivo.
+   Link com ?quiz=1 ou com UTM de outra origem (site, anúncio) continua no quiz. Depois de 19/10 o quiz volta sozinho. */
+(function(){try{
+  var p=new URLSearchParams(location.search), agora=new Date();
+  var ini=new Date('2026-10-06T00:00:00-03:00'), fim=new Date('2026-10-19T23:59:59-03:00');
+  var utm=((p.get('utm_source')||'')+' '+(p.get('utm_medium')||'')).trim();
+  var veioDeOutroLugar = p.get('quiz')==='1' || (utm!=='' && !/qr/i.test(utm));
+  if(agora>=ini && agora<=fim && !veioDeOutroLugar){ location.replace('pesquisa-submarino/'+location.search); }
+}catch(e){}})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Quiz Oceano Terapia · Qual é o seu nível de saturação mental?</title>
