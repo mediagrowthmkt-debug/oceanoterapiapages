@@ -55,6 +55,14 @@
   .obrigado h2{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:40px;color:var(--primaria);line-height:1.05}
   .obrigado p{margin-top:10px;font-size:17px}
   .obrigado a.ig{display:inline-block;margin-top:16px;padding:12px 18px;border-radius:12px;background:var(--primaria);color:#fff;text-decoration:none;font-weight:600}
+  .brinde{display:flex;gap:14px;align-items:center;background:#fff;border-radius:18px;padding:14px 16px;margin-bottom:14px;border:2px solid var(--secundaria)}
+  .brinde img{width:58px;height:58px;border-radius:12px;object-fit:contain;background:#fff;border:1px solid #e3eaed;flex:0 0 auto}
+  .brinde b{display:block;font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:24px;letter-spacing:.5px;color:var(--primaria);line-height:1.05}
+  .brinde span{font-size:15px;color:#3b4a55}
+  .ebook-acoes{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .ebook-acoes a{display:block;padding:14px 16px;border-radius:12px;text-decoration:none;font-weight:700;font-size:16px}
+  .ebook-acoes a.pri{background:var(--destaque);color:#fff}
+  .ebook-acoes a.sec{background:#fff;color:var(--primaria);border:1.5px solid var(--primaria)}
   .rodape{text-align:center;font-size:13px;color:#5b6b76;margin-top:18px}
   .rodape a{color:var(--primaria)}
 </style>
@@ -64,12 +72,16 @@
 <header class="topo">
   <div class="logo-box"><img src="logo-gaia-soul.png" alt="Instituto Gaia Soul" width="240" height="56"></div>
   <h1>Você mergulhou <span>com a gente</span></h1>
-  <p>Agora queremos saber como foi o Submarino Imersivo. Leva menos de 1 minuto.</p>
+  <p>Conte como foi o Submarino Imersivo e ganhe de presente o e-book Oceanoterapia. Leva menos de 1 minuto.</p>
   <svg class="onda" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path fill="#F4E9D8" d="M0,48 C240,92 480,4 720,40 C960,76 1200,14 1440,46 L1440,90 L0,90 Z"/></svg>
 </header>
 
 <main>
 <form id="form" novalidate>
+  <div class="brinde">
+    <img src="https://mediagrowthmkt-debug.github.io/oceanoterapiapages/logo-oceanoterapia.jpg" alt="E-book Oceanoterapia" width="58" height="58">
+    <div><b>Seu brinde: e-book Oceanoterapia</b><span>Responda e receba o e-book na hora e também no seu e-mail.</span></div>
+  </div>
 
   <div class="card">
     <div class="num">01</div>
@@ -157,22 +169,28 @@
 
   <div class="card">
     <div class="q">Para fechar: quem respondeu?</div>
-    <div class="dica">Assim te avisamos das próximas experiências do Instituto. Se for criança, coloque os dados do responsável.</div>
+    <div class="dica">Enviamos o e-book Oceanoterapia para o seu e-mail e avisamos das próximas experiências do Instituto. Se for criança, coloque os dados do responsável.</div>
     <div class="campo"><label for="nome">Nome</label><input type="text" id="nome" name="nome" autocomplete="name" maxlength="90" required></div>
     <div class="campo"><label for="whatsapp">WhatsApp com DDD</label><input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(71) 99999-9999" maxlength="20" required></div>
-    <div class="campo"><label for="email">E-mail (opcional)</label><input type="email" id="email" name="email" autocomplete="email" maxlength="160"></div>
+    <div class="campo"><label for="email">E-mail para receber o e-book</label><input type="email" id="email" name="email" autocomplete="email" inputmode="email" maxlength="160" placeholder="seuemail@exemplo.com" required></div>
     <label class="aceite"><input type="checkbox" id="aceite" name="aceite" required> <span>Aceito que o Instituto Gaia Soul guarde estas respostas e entre em contato comigo sobre novas experiências e projetos. Posso pedir para sair a qualquer momento.</span></label>
     <div class="hp" aria-hidden="true"><label for="company_website">Site</label><input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off"></div>
   </div>
 
   <div class="erro" id="erro" role="alert"></div>
-  <button class="btn" type="submit" id="enviar">Enviar minha avaliação</button>
+  <button class="btn" type="submit" id="enviar">Enviar e receber o e-book</button>
 </form>
 
 <div class="card obrigado" id="obrigado">
   <h2>Obrigado por mergulhar com a gente</h2>
   <p>Sua avaliação ajuda o Instituto a levar o oceano para cada vez mais pessoas.</p>
-  <p>Enquanto a próxima experiência não chega, acompanhe o que acontece no mar com a gente.</p>
+  <p><b>Aqui está o seu presente: o e-book Oceanoterapia.</b> Também enviamos para o seu e-mail.</p>
+  <div class="ebook-acoes">
+    <a class="pri" href="https://raw.githubusercontent.com/mediagrowthmkt-debug/oceanoterapiapages/main/ebook-oceanoterapia.pdf" download>Baixar o e-book em PDF</a>
+    <a class="sec" href="https://www.calameo.com/read/0082434534eaa018b0034" target="_blank" rel="noopener">Ler online</a>
+    <a class="sec" href="https://drive.google.com/drive/folders/1HbBIIrw2R5BuZC8MAB6Cqh5ST8TcJgXb?usp=sharing" target="_blank" rel="noopener">Ver no Google Drive</a>
+  </div>
+  <p style="margin-top:18px">Enquanto a próxima experiência não chega, acompanhe o que acontece no mar com a gente.</p>
   <a class="ig" href="https://instagram.com/institutogaiasoul" target="_blank" rel="noopener">@institutogaiasoul</a>
 </div>
 
@@ -215,6 +233,8 @@ form.addEventListener('submit', async (e) => {
   if (!valor('nota')) return mostrarErro('Escolha uma nota de 1 a 5 na pergunta 1.');
   if (nome.length < 2) return mostrarErro('Escreva o seu nome.');
   if (form.whatsapp.value.trim().startsWith('+') ? digitos.length < 8 : !/^[1-9][1-9]9\d{8}$|^[1-9][1-9][2-5]\d{7}$/.test(digitos)) return mostrarErro('Confira o WhatsApp com DDD. Exemplo: (71) 99999-9999.');
+  const emailV = form.email.value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(emailV)) return mostrarErro('Escreva um e-mail válido para receber o e-book.');
   if (!form.aceite.checked) return mostrarErro('Marque a caixa de autorização para enviar.');
 
   const p = new URLSearchParams(location.search);
@@ -243,7 +263,7 @@ form.addEventListener('submit', async (e) => {
     document.getElementById('obrigado').style.display = 'block';
     window.scrollTo({top:0, behavior:'smooth'});
   } catch (err) {
-    btn.disabled = false; btn.textContent = 'Enviar minha avaliação';
+    btn.disabled = false; btn.textContent = 'Enviar e receber o e-book';
     mostrarErro('Não conseguimos enviar agora. Confira a internet e toque em enviar de novo.');
   }
 });
